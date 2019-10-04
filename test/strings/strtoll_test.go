@@ -6,8 +6,8 @@ import (
 	s "github.com/pboyd04/GoCUtils/pkg/strings"
 )
 
-func TestStrtolJustInt(t *testing.T) {
-	result, str := s.Strtol("1", 10)
+func TestStrtollJustInt(t *testing.T) {
+	result, str := s.Strtoll("1", 10)
 	if result != 1 {
 		t.Errorf("Result was incorrect, got %d, want %d.", result, 1)
 	}
@@ -16,8 +16,8 @@ func TestStrtolJustInt(t *testing.T) {
 	}
 }
 
-func TestStrtolJustIntWJunk(t *testing.T) {
-	result, str := s.Strtol("1a", 10)
+func TestStrtollJustIntWJunk(t *testing.T) {
+	result, str := s.Strtoll("1a", 10)
 	if result != 1 {
 		t.Errorf("Result was incorrect, got %d, want %d.", result, 1)
 	}
@@ -26,48 +26,50 @@ func TestStrtolJustIntWJunk(t *testing.T) {
 	}
 }
 
-func TestStrtolMaxInt(t *testing.T) {
-	result, str := s.Strtol("2147483647", 10)
-	if result != 2147483647 {
-		t.Errorf("Result was incorrect, got %d, want %d.", result, 2147483647)
+func TestStrtollMaxInt(t *testing.T) {
+	result, str := s.Strtoll("9223372036854775807", 10)
+	const max int64 = 9223372036854775807
+	if result != max {
+		t.Errorf("Result was incorrect, got %d, want %d.", result, max)
 	}
 	if len(str) != 0 {
 		t.Errorf("Got an unexpected remainder, got %s", str)
 	}
 }
 
-func TestStrtolMaxIntWJunk(t *testing.T) {
-	result, str := s.Strtol("2147483647?l", 10)
-	if result != 2147483647 {
-		t.Errorf("Result was incorrect, got %d, want %d.", result, 2147483647)
+func TestStrtollMaxIntWJunk(t *testing.T) {
+	result, str := s.Strtoll("9223372036854775807?l", 10)
+	const max int64 = 9223372036854775807
+	if result != max {
+		t.Errorf("Result was incorrect, got %d, want %d.", result, max)
 	}
 	if str != "?l" {
 		t.Errorf("Remainder was incorrect, got %s, want %s.", str, "?l")
 	}
 }
 
-func TestStrtolMinInt(t *testing.T) {
-	result, str := s.Strtol("-2147483646", 10)
-	if result != -2147483646 {
-		t.Errorf("Result was incorrect, got %d, want %d.", result, -2147483646)
+func TestStrtollMinInt(t *testing.T) {
+	result, str := s.Strtoll("-9223372036854775806", 10)
+	if result != -9223372036854775806 {
+		t.Errorf("Result was incorrect, got %d, want %d.", result, -9223372036854775806)
 	}
 	if len(str) != 0 {
 		t.Errorf("Got an unexpected remainder, got %s", str)
 	}
 }
 
-func TestStrtolMinIntWJunk(t *testing.T) {
-	result, str := s.Strtol("-2147483646---", 10)
-	if result != -2147483646 {
-		t.Errorf("Result was incorrect, got %d, want %d.", result, -2147483646)
+func TestStrtollMinIntWJunk(t *testing.T) {
+	result, str := s.Strtoll("-9223372036854775806---", 10)
+	if result != -9223372036854775806 {
+		t.Errorf("Result was incorrect, got %d, want %d.", result, -9223372036854775806)
 	}
 	if str != "---" {
 		t.Errorf("Remainder was incorrect, got %s, want %s.", str, "---")
 	}
 }
 
-func TestStrtolBaseDetection(t *testing.T) {
-	result, str := s.Strtol("10", 0)
+func TestStrtollBaseDetection(t *testing.T) {
+	result, str := s.Strtoll("10", 0)
 	if result != 10 {
 		t.Errorf("Result was incorrect, got %d, want %d.", result, 10)
 	}
@@ -75,7 +77,7 @@ func TestStrtolBaseDetection(t *testing.T) {
 		t.Errorf("Remainder was incorrect, got %s, want %s.", str, "")
 	}
 
-	result, str = s.Strtol("010", 0)
+	result, str = s.Strtoll("010", 0)
 	if result != 8 {
 		t.Errorf("Result was incorrect, got %d, want %d.", result, 8)
 	}
@@ -83,7 +85,7 @@ func TestStrtolBaseDetection(t *testing.T) {
 		t.Errorf("Remainder was incorrect, got %s, want %s.", str, "")
 	}
 
-	result, str = s.Strtol("0x10", 0)
+	result, str = s.Strtoll("0x10", 0)
 	if result != 16 {
 		t.Errorf("Result was incorrect, got %d, want %d.", result, 16)
 	}
@@ -92,8 +94,8 @@ func TestStrtolBaseDetection(t *testing.T) {
 	}
 }
 
-func TestStrtolBaseDetectionWJunk(t *testing.T) {
-	result, str := s.Strtol("10a", 0)
+func TestStrtollBaseDetectionWJunk(t *testing.T) {
+	result, str := s.Strtoll("10a", 0)
 	if result != 10 {
 		t.Errorf("Result was incorrect, got %d, want %d.", result, 10)
 	}
@@ -101,7 +103,7 @@ func TestStrtolBaseDetectionWJunk(t *testing.T) {
 		t.Errorf("Remainder was incorrect, got %s, want %s.", str, "a")
 	}
 
-	result, str = s.Strtol("010-", 0)
+	result, str = s.Strtoll("010-", 0)
 	if result != 8 {
 		t.Errorf("Result was incorrect, got %d, want %d.", result, 8)
 	}
@@ -109,7 +111,7 @@ func TestStrtolBaseDetectionWJunk(t *testing.T) {
 		t.Errorf("Remainder was incorrect, got %s, want %s.", str, "-")
 	}
 
-	result, str = s.Strtol("0x10x", 0)
+	result, str = s.Strtoll("0x10x", 0)
 	if result != 16 {
 		t.Errorf("Result was incorrect, got %d, want %d.", result, 16)
 	}
