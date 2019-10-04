@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func strtol(str string, base int) (int32, string) {
+func Strtol(str string, base int) (int32, string) {
 	str = strings.TrimLeft(str, " \t")
 	i, err := strconv.ParseInt(str, base, 32)
 	if err == nil {
